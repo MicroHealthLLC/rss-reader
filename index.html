@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>RSS Reader</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body onunload="saveFeeds()">
+
+	<div id="controller">
+		<div id="feed_control_div">
+			<div id="topbtns">
+			    <button type="button" id="instructions_btn">Instructions</button>
+			    <button type="button" id="showform_btn">Add Feed</button>
+	        </div>
+	        <div id="instructions_div">
+				<button type="button" id="closeinstr_btn">X</button>
+			    <p class="note"><strong>FEEDS CONTROL</strong><br>
+			    	<p>Click &ldquo;Add Feed&rdquo; to display the Feed Form. Input a name and url for the feed, then click &ldquo;Save&rdquo;. The new RSS feed will be added to the feeds listing and the feeds content display will automatically update.</p>
+			    	<p>Checked feeds will be included in the feeds content display. Select feeds individually, click &ldquo;Check All&rdquo;, or click &ldquo;Uncheck All&rdquo;; then click &ldquo;Update&rdquo;.</p>
+			    	<p>Click &ldquo;E&rdquo; to edit a feed. The Feed Form will display with the corresponding info filled in. Clicking &ldquo;Save&rdquo; will update the feeds listing and the feeds content display.</p>
+			    	<p>Click &ldquo;X&rdquo; to delete a feed from the feeds listing and the feeds content display.</p>
+	        </div>
+
+	        <div id="feeds_form_div">
+				<form id="feeds_form">
+					<button type="reset" id="closeform_btn">X</button>
+		  	        <h4>Feed Form</h1>
+		  	        <div hidden>
+					    <label for="feed_id" class="formlabel">ID:</label>
+					    <input type="text" id="feed_id" name="feed_id" />
+				    </div>
+					<label for="feed_name" class="formlabel">Name:</label>
+					<input type="text" id="feed_name" name="feed_name" />
+					<label for="feed_site" class="formlabel">URL:</label>
+					<input type="text" id="feed_site" name="feed_site" />
+					<br><br>
+					<div hidden>
+						<label for="feed_include" class="formlabel">Include: 
+						<input type="checkbox" id="feed_include" name="feed_include" checked />
+						</label>
+					</div>
+					<button type="submit" id="submit_feed">Save</button>
+					<button type="reset" id="reset_btn">Reset</button>
+					<br><br>
+				</form>
+		    </div>
+
+	        <br>
+
+			<button type="button" id="update_feeds">Update</button>
+		    <button type="button" id="clear_feeds">Uncheck All</button>
+		    <button type="button" id="all_feeds">Check All</button>
+	        <br><br>
+	        <div id="feedslisting"></div>
+		    <button type="button" id="top_feeds"><span class="arrow">&#8679;</span> List Top</button>
+	        <br>
+		</div>
+	</div>
+
+	<div id="main">
+		<div id="container">
+		    <div id="rss-feeds"></div>
+		    <button type="button" id="top_feeds2"><span class="arrow">&#8679;</span> List Top</button>
+		    <a href="#container"><button type="button" id="to_top"><span class="arrow">&#8679;</span> Feeds Top</button></a>
+		</div>
+	</div>
+
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/jquery.rss.js"></script>
+<script src="js/rss_reader.js"></script>
+
+</body>
+</html>
