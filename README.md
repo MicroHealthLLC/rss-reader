@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 RSS Reader allows users to input multiple rss feeds using the jquery.rss plugin (see below). Users select one or more feeds to view simultaneously. Search feeds by date range and word(s). Feed urls w/ corresponding names are saved to localStorage.
-=======
-RSS Reader allows users to input multiple rss feeds using the jquery.rss plugin (see below). Users select one or more feeds to view simultaneously. Feed urls w/ corresponding names are saved to localStorage.
->>>>>>> origin/master
 
 
 # jquery.rss [![Build Status](https://travis-ci.org/sdepold/jquery-rss.svg?branch=master)](https://travis-ci.org/sdepold/jquery-rss)
