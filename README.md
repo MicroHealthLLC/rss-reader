@@ -1,3 +1,6 @@
+RSS Reader allows users to input multiple rss feeds using the jquery.rss plugin (see below). Users select one or more feeds to view simultaneously. Feed urls w/ corresponding names are saved to localStorage.
+
+
 # jquery.rss [![Build Status](https://travis-ci.org/sdepold/jquery-rss.svg?branch=master)](https://travis-ci.org/sdepold/jquery-rss)
 
 This plugin can be used to read a RSS feed and transform it into a custom piece of HTML.
