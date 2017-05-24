@@ -1,26 +1,25 @@
 body { background-color:#aaa; font-family: Helvetica, Arial, sans-serif; font-size: 1em; margin:0; padding:0; }
-#main {width: 100%; background-color:#fafafa; margin: 0; padding: 15px 0 10px 0; float:none;}
-#controller {width: 100%; background-color:#8ad; background-color:#99d9ea; background-color:#87c9dc; margin: 0; padding: 10px 0 10px 0; float:none;}
+#container {width: 100%; min-width: 400px; max-width: 1200px; background-color:#fafafa; margin: 0 auto 0 0; padding: 15px 0 10px 0;}
+#controller {z-index:1000; position:absolute; width: 100%; min-width: 400px; max-width: 768px; background-color:#87c9dc; margin: 112px 0 0 0; padding: 10px 0 10px 0; display:none;}
+#hidefeedslistbtn {margin-left:10px;}
 a {color:#246; font-weight: bold; text-decoration: none;}
 a:hover {text-decoration: underline;}
 h4 {font: 1em Verdana, Helvetica, Arial, sans-serif; font-weight: bold; margin-top: 0;}
-#instructions_div {margin: 40px 0 10px 0; padding: 10px; background-color:#fafafa; display: none;}
-#container {width: 90%; margin: 0 auto; padding: 10px 10px 30px 10px;}
+#instructions_div {margin: 60px 0 10px 0; padding: 10px; background-color:#fafafa; display: none;}
+#main {width: 90%; margin: 0 auto; padding: 10px 10px 30px 10px;}
 #feed_control_div {width: 90%; margin: 0 auto; padding: 15px 10px 15px 10px;}
-#feeds_form_div {margin: 40px 0 0px 0; padding: 10px; background-color:#fafafa; display: none;}
+#feeds_form_div {margin: 60px 0 0px 0; padding: 10px; background-color:#fafafa; display: none;}
 #instructions_btn, #showform_btn, #submit_feed, #reset_btn, #add_btn, #clear_feeds, #all_feeds, #update_feeds {width: 8em; background-color:#246; color: white; float:right; border: none; margin: -5px 0 20px 0; padding: 6px;}
-#topbtns {margin-bottom: 30px;}
-#instructions_btn {width: 8em; float:left;}
+#topbtns {margin: 10px 0 10px 10px; width:85%; float:right;}
+#instructions_btn {width: 8em; float:right;}
 #showform_btn, #all_feeds, #clear_feeds {width: 8em; margin-left: 10px;}
 #submit_feed {margin: 10px 0 20px 0;}
 #update_feeds {margin: 0 0 20px 0;}
 #reset_btn, #add_btn {margin: 10px 10px 20px 0;}
 #all_feeds, #clear_feeds {margin: 0 10px 20px 0;}
-#closeinstr_btn, #closeform_btn {width: 2.5em; background-color:#555; color: white; float:right; border: none; margin: -5px 0 0 0; padding: 3px; font-size: .85em;}
-#to_top, #top_feeds, #top_feeds2 {width: 9em; background-color:#555; color: white; float:right; border: none; margin: -5px 0 0 0; padding: 0 0 4px 0; font-size: .75em;}
-#top_feeds2 {margin: -5px 0 20px 10px; display: none;}
-.arrow {font-size: 1.5em;}
-#instructions_btn:hover, #showform_btn:hover, #submit_feed:hover, #reset_btn:hover, #add_btn:hover, #clear_feeds:hover, #all_feeds:hover, #update_feeds:hover, #closeinstr_btn:hover, #closeform_btn:hover, #to_top:hover, #top_feeds:hover, #top_feeds2:hover {background-color:#333;}
+#closeinstr_btn, #closeform_btn {width: 2.5em; background-color:#555; color: white; float:right; border: none; margin: 0px 0 0 0; padding: 3px; font-size: .85em;}
+#to_top, #top_feeds {float:right; border: none; }
+#instructions_btn:hover, #showform_btn:hover, #submit_feed:hover, #reset_btn:hover, #add_btn:hover, #clear_feeds:hover, #all_feeds:hover, #update_feeds:hover, #closeinstr_btn:hover, #closeform_btn:hover {background-color:#333;}
 .note, .formlabel, .rss_small {clear:both; font-size: .85em;}
 .editbtn, .deletebtn {float:right; margin-left: 10px;}
 .editbtn, .deletebtn, .morebtn {width: 2.5em; height: 2em; background-color: #aaa; color: black; border: none;}
@@ -31,21 +30,68 @@ h4 {font: 1em Verdana, Helvetica, Arial, sans-serif; font-weight: bold; margin-t
 .feedurl {display: none;}
 .rssshort {display: block;}
 .rssall {display: none;}
-#rss-feeds {margin-top: 40px; margin-bottom: 10px;}
+#rss-feeds {clear:both; margin-top: 60px; margin-bottom: 10px;}
+#searchfeed_div {float:right; margin:0 0 30px 0px; width: 90%; text-align:right;}
+#searchdates {float:right; margin-right: 410px;}
+#searchfromdate, #searchtodate {width: 100px; height:24px;}
+#searchtodate {margin-left:10px;}
+#searchword {float:right; margin-top:-30px;}
+#searchinput {width: 320px; height:30px;}
+#searchbtn img {width:18px; height:18px;}
+#resetsearch img {width:18px; height:18px;}
+button{border: none; box-shadow: none; background:transparent;}
+#showfeedslistbtn {float:left;}
+#showfeedslistbtn img {width:20px;height:18px;}
+.flipimg {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";            
+}
+.lishow {display:block;}
+.lihide {display:none;}
 
 
-@media all and (min-width: 641px) and (max-width: 970px) {
-	#main {float: none; width: 90%; margin: 0 auto; }
-	#controller {float: none; width: 90%; margin: 0 auto; }
+
+
+@media all and (min-width:1020px) {
+    #searchdates {margin-right: 490px;}
+    #searchinput {width: 400px;}
 }
 
-@media all and (min-width: 971px) and (max-width: 1499px) {
-	#main {float: left; width: 60%; margin: 0; }
-	#controller {float: right; width: 40%; margin: 0;}
+@media all and (min-width:920px) and (max-width:1019px) {
+    #searchdates {margin-right: 490px;}
+    #searchinput {width: 400px;}
+}
+@media all and (min-width:769px) and (max-width:919px) {
+    #searchdates {margin-right: 360px;}
+    #searchinput {width: 270px;}
 }
 
-@media all and (min-width: 1500px) {
-	#main {float: left; width: 70%; margin: 0; }
-	#controller {float: right; width: 30%; margin: 0;}
+@media all and (min-width:640px) and (max-width:768px) {
+    #searchinput {width: 400px;}
+}
+
+@media all and (min-width:500px) and (max-width:639px) {
+    #searchinput {width: 320px;}
+}
+
+@media all and (min-width:440px) and (max-width:499px) {
+    #searchinput {width: 270px;}
+}
+
+@media all and (max-width:439px) {
+    #searchinput {width: 240px;}
+}
+
+@media all and (min-width:769px) {
+    #controller {margin-top:60px;}
+}
+
+@media all and (max-width:768px) {
+    #searchdates {float:right; margin-right: 72px;}
+    #searchword {margin-top:20px;}
 }
 

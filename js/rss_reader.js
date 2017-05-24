@@ -1,5 +1,6 @@
 var rssReaderFeeds = [];
 
+
 function showList() {
 	"use strict";
 	$("#feedslisting").empty();
@@ -14,7 +15,60 @@ function showList() {
     }
 }
 
-function showFeed() {
+
+function findFeeds(datefrom, dateto, searchinfo) {
+	"use strict";
+    var thesefeeds = document.getElementsByTagName("li");
+    if (thesefeeds.length > 0) {
+	    var j, title, thesetitles = document.querySelectorAll(".title");
+	    var feeddate, from_date, to_date, thesedates = document.querySelectorAll(".date");
+	    var rssall, theserssall = document.querySelectorAll(".rssall");
+	    var datefilter, wordfilter, includefeed;
+	    if ((datefrom !== null) || (dateto !== thisdate)) {
+	        datefilter = true;
+	    } else {
+		    datefilter = false;     	
+	    }
+	    if (searchinfo !== null) {
+	        wordfilter = true;
+	    } else {
+	        wordfilter = false;    	
+	    }
+	    for (j = 0; j < thesefeeds.length; j+=1) {
+            includefeed = true;
+            if (datefilter === true) {
+                feeddate = new Date(thesedates[j].innerHTML);
+                feeddate.setHours(0,0,0,0);
+                from_date = new Date(datefrom);
+                to_date = new Date(dateto);
+                if ((feeddate < from_date) || (feeddate > to_date)) {
+                    includefeed = false;                	
+                }
+            }
+            if (includefeed === true) {
+            	if (wordfilter === true) {
+		    		title = thesetitles[j].innerHTML.toLowerCase();
+		    		rssall = theserssall[j].innerHTML.toLowerCase();
+			        if ((title.indexOf(searchinfo) > -1) || (rssall.indexOf(searchinfo) > -1)) {
+			            $(thesefeeds[j]).addClass("lishow");
+			            $(thesefeeds[j]).removeClass("lihide");
+				    } else {
+			            $(thesefeeds[j]).addClass("lihide");
+			            $(thesefeeds[j]).removeClass("lishow");
+			        }
+			    } else {
+		            $(thesefeeds[j]).addClass("lishow");
+		            $(thesefeeds[j]).removeClass("lihide");		    	
+			    }		    
+		    } else {
+	            $(thesefeeds[j]).addClass("lihide");
+	            $(thesefeeds[j]).removeClass("lishow");
+		    }
+	    }
+	}
+}
+
+function showFeed(datefrom, dateto, searchinfo) {
 	"use strict";
 	var i, thissite, thisname;
 	jQuery(function($) {
@@ -22,11 +76,60 @@ function showFeed() {
 			if (rssReaderFeeds[i].included === true) {
 		        thisname = rssReaderFeeds[i].name;
 		        thissite = rssReaderFeeds[i].site;
-			    $("#rss-feeds").rss(thissite,{limit: null, ssl: false, entryTemplate: '<li><a href="{url}" target="_blank">{title}</a><br/><span class="rss_small">' + thisname + '<br/>{date}</span><br/><button type="button" class="morebtn">&plus;</button><span class="rssshort">{shortBody}</span><br/><span class="rssall">{bodyPlain}</span></li><br/>', dateFormat: 'MMMM D, YYYY, h:mm:ss A'})
+			    $("#rss-feeds").rss(thissite,{limit: null, ssl: false, entryTemplate: '<li class="lishow"><a href="{url}" target="_blank"><span class="title">{title}</span></a><br/><span class="rss_small">' + thisname + '<br/><span class="date">{date}</span></span><br/><button type="button" class="morebtn">&plus;</button><span class="rssshort">{shortBody}</span><br/><span class="rssall">{bodyPlain}</span><br /></li>', dateFormat: 'MMMM D, YYYY, h:mm:ss A'})
 		    }
 	    }
 	});
+	findFeeds(datefrom, dateto, searchinfo);		
 }
+
+
+$("#searchbtn").click(function () {
+	"use strict";
+	var searchinput = $("#searchinput").val().toLowerCase().trim();
+	var searchfromdate = $("#searchfromdate").val();
+	var searchtodate = $("#searchtodate").val();
+	if (searchinput === "") {
+	    findFeeds(searchfromdate, searchtodate, null);
+    } else {
+	    findFeeds(searchfromdate, searchtodate, searchinput);
+    }
+});
+
+
+$("#searchfromdate").change(function () {
+	"use strict";
+	var searchfromdate = $("#searchfromdate").val();
+    var testdate = new Date(searchfromdate);
+    var okdate = (testdate instanceof Date && !isNaN(testdate.valueOf()));
+	if (okdate === false) {
+    	$( "#searchfromdate" ).datepicker("setDate", null);
+	}
+});
+
+$("#searchtodate").change(function () {
+	"use strict";
+	var searchtodate = $("#searchtodate").val();
+    var testdate = new Date(searchtodate);
+    var okdate = (testdate instanceof Date && !isNaN(testdate.valueOf()));
+	if ((searchtodate === null) || (okdate === false)) {
+    	$( "#searchtodate" ).datepicker("setDate", thisdate);
+	}
+});
+
+$("#resetsearch").click(function () {
+	"use strict";
+    $( "#searchfromdate" ).datepicker("setDate", null);
+    $( "#searchtodate" ).datepicker("setDate", thisdate);
+	$("#searchinput").val("");
+    var j, thesefeeds = document.getElementsByTagName("li");
+    if (thesefeeds.length > 0) {
+	    for (j = 0; j < thesefeeds.length; j+=1) {
+            $(thesefeeds[j]).addClass("lishow");
+            $(thesefeeds[j]).removeClass("lihide");
+        }
+    }
+});
 
 
 $("#instructions_btn").click(function () {
@@ -54,6 +157,30 @@ function resetInput() {
     $("#feeds_form_div").hide();
     $("#feeds_form").reset();
 }
+
+$("#update_feeds").click(function (e) {
+    "use strict";
+    e.preventDefault();
+    var el = $(this);
+    el.prop("disabled", true);
+	$("#rss-feeds").empty();
+	var f, feeds = document.querySelectorAll(".includeck");
+	for (f = 0; f < feeds.length; f+=1) {
+        rssReaderFeeds[f].included = document.getElementById("include_feed" + f).checked;
+	}
+	var searchfromdate = $("#searchfromdate").val();
+	var searchtodate = $("#searchtodate").val();
+	var searchinput = $("#searchinput").val().toLowerCase().trim();
+	if (searchinput === "") {
+        showFeed(searchfromdate, searchtodate, null);
+	} else {
+	    showFeed(searchfromdate, searchtodate, searchinput);
+    }
+    setTimeout(function (){
+    	el.prop("disabled", false);
+    }, 3000);
+});
+
 
 $("#submit_feed").click(function (e) {
 	"use strict";
@@ -104,6 +231,54 @@ $("#closeform_btn").click(function () {
 
 // FEEDS LISTING FORM ******************************************************************************
 
+
+
+function show_list_feeds(obj, from, to) {
+    "use strict";
+	obj.style.display = "block";
+    if (from <= to) {         
+       obj.style.marginLeft = from + "px";
+       setTimeout(function() {
+           show_list_feeds(obj, from + 10, to);
+       }, 6)
+    } else {
+        return;
+    }
+}
+
+function hide_list_feeds(obj, from, to){
+    "use strict";
+   if (from <= to) {         
+       obj.style.display = "none";
+       return;  
+   } else {
+       obj.style.marginLeft = from + "px";
+       setTimeout(function() {
+           hide_list_feeds(obj, from - 10, to);
+       }, 6)
+   }
+}
+
+$("#showfeedslistbtn").click(function () {
+	"use strict";
+	var obj = document.getElementById("controller");
+	var obj_width = -Math.abs($(obj).width());
+	if (obj.style.display === "block") {
+        hide_list_feeds(obj, 0, obj_width);
+	} else {
+        show_list_feeds(obj, obj_width, 0);
+	}
+});
+
+$("#hidefeedslistbtn").click(function () {
+	"use strict";
+	var obj = document.getElementById("controller");
+	var obj_width = -Math.abs($(obj).width());
+    hide_list_feeds(obj, 0, obj_width);
+});
+
+
+
 $("#clear_feeds").click(function () {
 	"use strict";
 	var i, feeds = document.querySelectorAll(".includeck");
@@ -135,6 +310,7 @@ $("body").on("click", ".editbtn", function (e) {
 	$("#feeds_form_div").show();
 });
 
+
 $("body").on("click", ".deletebtn", function (e) {
 	"use strict";
 	e.preventDefault();
@@ -164,17 +340,6 @@ $("body").on("click", ".deletebtn", function (e) {
 
 
 
-$("#update_feeds").click(function (e) {
-    "use strict";
-    e.preventDefault();
-	$("#rss-feeds").empty();
-	var f, feeds = document.querySelectorAll(".includeck");
-	for (f = 0; f < feeds.length; f+=1) {
-        rssReaderFeeds[f].included = document.getElementById("include_feed" + f).checked;
-	}
-    showFeed();
-});
-
 $("body").on("click", ".morebtn", function () {
     "use strict";
     if ($(this).closest("li").find(".rssshort").css("display") === "block") {
@@ -187,19 +352,20 @@ $("body").on("click", ".morebtn", function () {
 });
 
 
-$("#top_feeds, #top_feeds2").click(function () {
+$("#top_feeds").click(function () {
+    "use strict";
+    if ($(window).width() > 769) {
+        window.scrollTo(0, 70);
+	} else {
+        window.scrollTo(0, 120);
+	}
+});
+
+$("#to_top").click(function () {
     "use strict";
     window.scrollTo(0, 0);
 });
 
-function checkFloat() {
-	"use strict";
-    if ($("#main").css("float") === "none") {
-        $("#top_feeds2").show();
-    } else {
-        $("#top_feeds2").hide();    	
-    }	
-}
 
 var theserssfeeds;
 
@@ -209,28 +375,19 @@ function saveFeeds() {
     localStorage.setItem("theserssfeeds", theserssfeeds);
 }
 
+
 $(document).ready(function () {
 	"use strict";
+    $( "#searchfromdate" ).datepicker("setDate", null);
+    $( "#searchtodate" ).datepicker("setDate", thisdate);
+	$("#searchinput").val("");
 	theserssfeeds = localStorage.getItem("theserssfeeds");
 	if (theserssfeeds !== null) {
         rssReaderFeeds = JSON.parse(theserssfeeds);
     } else {
     	rssReaderFeeds = [];
     }
-	checkFloat();
-    $("#update_feeds").on("click", function (event) {  
-        event.preventDefault();
-        var el = $(this);
-        el.prop("disabled", true);
-        setTimeout(function (){
-        	el.prop("disabled", false);
-        }, 3000);
-    });
     showList();
-	showFeed();
+	$("#update_feeds").click();
 });
 
-$(window).resize(function () {
-	"use strict";
-	checkFloat();
-});
