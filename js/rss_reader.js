@@ -7,9 +7,9 @@ function showList() {
 	var i, newfeed;
 	for (i = 0; i < rssReaderFeeds.length; i+=1) {
 		if (rssReaderFeeds[i].included === true) {
-            newfeed = '<p class="feedlist"><button type="button" id="delete_feed' + i + '" class="deletebtn">X</button><button type="button" id="edit_feed' + i + '" class="editbtn">E</button><span id="feedid' + i + '" class="feedid" hidden>' + rssReaderFeeds[i].id + '</span><input type="checkbox" id="include_feed' + i + '" name="include_feed' + i + '" class="includeck" checked /><span id="feedname' + i + '">' + rssReaderFeeds[i].name + '</span><span id="feedsite' + i + '" hidden>' + rssReaderFeeds[i].site + '</span></p>';
+            newfeed = '<p class="feedlist"><button type="button" id="delete_feed' + i + '" class="deletebtn"><img src="images/glyphicons-208-remove.png"></button><button type="button" id="edit_feed' + i + '" class="editbtn"><img src="images/glyphicons-151-edit.png"></button><span id="feedid' + i + '" class="feedid" hidden>' + rssReaderFeeds[i].id + '</span><button id="include_feed' + i + '" name="include_feed' + i + '" class="includeck includedyes"><img class="includedimg" id="togglechkbtn' + i + '" src="images/glyphicons-153-check.png"></button><span id="feedname' + i + '">' + rssReaderFeeds[i].name + '</span><span id="feedsite' + i + '" hidden>' + rssReaderFeeds[i].site + '</span></p>';
 	    } else {
-            newfeed = '<p class="feedlist"><button type="button" id="delete_feed' + i + '" class="deletebtn">X</button><button type="button" id="edit_feed' + i + '" class="editbtn">E</button><span id="feedid' + i + '" class="feedid" hidden>' + rssReaderFeeds[i].id + '</span><input type="checkbox" id="include_feed' + i + '" name="include_feed' + i + '" class="includeck" /><span id="feedname' + i + '">' + rssReaderFeeds[i].name + '</span><span id="feedsite' + i + '" hidden>' + rssReaderFeeds[i].site + '</span></p>';
+            newfeed = '<p class="feedlist"><button type="button" id="delete_feed' + i + '" class="deletebtn"><img src="images/glyphicons-208-remove.png"></button><button type="button" id="edit_feed' + i + '" class="editbtn"><img src="images/glyphicons-151-edit.png"></button><span id="feedid' + i + '" class="feedid" hidden>' + rssReaderFeeds[i].id + '</span><button id="include_feed' + i + '" name="include_feed' + i + '" class="includeck includedno"><img class="includedimg" id="togglechkbtn' + i + '" src="images/glyphicons-154-unchecked.png"></button><span id="feedname' + i + '">' + rssReaderFeeds[i].name + '</span><span id="feedsite' + i + '" hidden>' + rssReaderFeeds[i].site + '</span></p>';
 	    }
 	    $("#feedslisting").append(newfeed);
     }
@@ -68,6 +68,7 @@ function findFeeds(datefrom, dateto, searchinfo) {
 	}
 }
 
+
 function showFeed(datefrom, dateto, searchinfo) {
 	"use strict";
 	var i, thissite, thisname;
@@ -76,7 +77,8 @@ function showFeed(datefrom, dateto, searchinfo) {
 			if (rssReaderFeeds[i].included === true) {
 		        thisname = rssReaderFeeds[i].name;
 		        thissite = rssReaderFeeds[i].site;
-			    $("#rss-feeds").rss(thissite,{limit: null, ssl: false, entryTemplate: '<li class="lishow"><a href="{url}" target="_blank"><span class="title">{title}</span></a><br/><span class="rss_small">' + thisname + '<br/><span class="date">{date}</span></span><br/><button type="button" class="morebtn">&plus;</button><span class="rssshort">{shortBody}</span><br/><span class="rssall">{bodyPlain}</span><br /></li>', dateFormat: 'MMMM D, YYYY, h:mm:ss A'})
+			//    $("#rss-feeds").rss(thissite,{limit: null, ssl: false, entryTemplate: '<li class="lishow"><a href="{url}" target="_blank"><span class="title">{title}</span></a><br/><span class="rss_small">' + thisname + '<br/><span class="date">{date}</span></span><br/><button type="button" class="morebtn">&plus;</button><span class="rssshort">{shortBody}</span><br/><span class="rssall">{bodyPlain}</span><br /></li>', dateFormat: 'MMMM D, YYYY, h:mm:ss A'})
+                $("#rss-feeds").rss(thissite,{limit: null, ssl: false, entryTemplate: '<li class="lishow"><a href="{url}" target="_blank"><span class="title">{title}</span></a><br/><span class="rss_small">' + thisname + '<br/><span class="date">{date}</span></span><br/><span class="rssall">{bodyPlain}</span><br /></li>', dateFormat: 'MMMM D, YYYY, h:mm:ss A'})
 		    }
 	    }
 	});
@@ -137,8 +139,9 @@ $("#instructions_btn").click(function () {
 	$("#instructions_div").show();
 });
 
-$("#closeinstr_btn").click(function () {
+$("#closeinstr_btn").click(function (e) {
 	"use strict";
+    e.preventDefault();
     $("#instructions_div").hide();
 });
 
@@ -158,15 +161,21 @@ function resetInput() {
     $("#feeds_form").reset();
 }
 
+
 $("#update_feeds").click(function (e) {
     "use strict";
     e.preventDefault();
     var el = $(this);
     el.prop("disabled", true);
 	$("#rss-feeds").empty();
-	var f, feeds = document.querySelectorAll(".includeck");
-	for (f = 0; f < feeds.length; f+=1) {
-        rssReaderFeeds[f].included = document.getElementById("include_feed" + f).checked;
+	var i, thisid, btnimg, feedid = document.querySelectorAll(".feedid");
+    for (i = 0; i < feedid.length; i+=1) {
+        btnimg = document.getElementById("togglechkbtn" + i);
+        if (btnimg.src.indexOf("images/glyphicons-154-unchecked.png") > -1) {
+            rssReaderFeeds[i].included = false;
+        } else {
+            rssReaderFeeds[i].included = true;            
+        }
 	}
 	var searchfromdate = $("#searchfromdate").val();
 	var searchtodate = $("#searchtodate").val();
@@ -222,8 +231,9 @@ $("#submit_feed").click(function (e) {
 	}
 });
 
-$("#closeform_btn").click(function () {
+$("#closeform_btn").click(function (e) {
 	"use strict";
+    e.preventDefault();
     resetInput();
 });
 
@@ -231,67 +241,57 @@ $("#closeform_btn").click(function () {
 
 // FEEDS LISTING FORM ******************************************************************************
 
-
-
-function show_list_feeds(obj, from, to) {
+function setCheckedToggle() {
     "use strict";
-	obj.style.display = "block";
-    if (from <= to) {         
-       obj.style.marginLeft = from + "px";
-       setTimeout(function() {
-           show_list_feeds(obj, from + 10, to);
-       }, 6)
-    } else {
-        return;
+    var i, includedbtns = document.querySelectorAll(".includeck");
+    for (i = 0; i < includedbtns.length; i+=1) {
+        includedbtns[i].addEventListener("click", function () {
+            var thisid = this.id.slice(12), btnimg = document.getElementById("togglechkbtn" + thisid);
+            if (btnimg.src.indexOf("images/glyphicons-154-unchecked.png") > -1) {
+                btnimg.src = "images/glyphicons-153-check.png";
+                $("#include_feed" + thisid).addClass("includedyes");
+                $("#include_feed" + thisid).removeClass("includedno");
+            } else {
+                btnimg.src = "images/glyphicons-154-unchecked.png";
+                $("#include_feed" + thisid).addClass("includedno");
+                $("#include_feed" + thisid).removeClass("includedyes");
+            }
+        });
     }
 }
 
-function hide_list_feeds(obj, from, to){
-    "use strict";
-   if (from <= to) {         
-       obj.style.display = "none";
-       return;  
-   } else {
-       obj.style.marginLeft = from + "px";
-       setTimeout(function() {
-           hide_list_feeds(obj, from - 10, to);
-       }, 6)
-   }
-}
+var openSlider = document.getElementById("openSliderbtn"),
+    slide = document.querySelector(".slide"),
+    closeSlider = document.getElementById("closeSliderbtn"),
+    feedslistingdiv = document.getElementById("feedslistingdiv");
 
-$("#showfeedslistbtn").click(function () {
-	"use strict";
-	var obj = document.getElementById("controller");
-	var obj_width = -Math.abs($(obj).width());
-	if (obj.style.display === "block") {
-        hide_list_feeds(obj, 0, obj_width);
-	} else {
-        show_list_feeds(obj, obj_width, 0);
-	}
+openSlider.addEventListener("click",  function () {
+    feedslistingdiv.style.zIndex = 2000;
+    slide.classList.remove("slide-up");
+    setCheckedToggle();
 });
 
-$("#hidefeedslistbtn").click(function () {
-	"use strict";
-	var obj = document.getElementById("controller");
-	var obj_width = -Math.abs($(obj).width());
-    hide_list_feeds(obj, 0, obj_width);
+closeSlider.addEventListener("click", function () {
+    slide.classList.add("slide-up");
+    setTimeout(function () {
+        feedslistingdiv.style.zIndex = -2000;
+    }, 800);
 });
-
 
 
 $("#clear_feeds").click(function () {
 	"use strict";
-	var i, feeds = document.querySelectorAll(".includeck");
+	var i, feeds = document.querySelectorAll(".includedimg");
 	for (i = 0; i < feeds.length; i+=1) {
-		document.getElementById("include_feed" + i).checked = false;
+        feeds[i].src = "images/glyphicons-154-unchecked.png";
 	}
 });
 
 $("#all_feeds").click(function () {
 	"use strict";
-	var i, feeds = document.querySelectorAll(".includeck");
+	var i, feeds = document.querySelectorAll(".includedimg");
 	for (i = 0; i < feeds.length; i+=1) {
-		document.getElementById("include_feed" + i).checked = true;
+        feeds[i].src = "images/glyphicons-153-check.png";
 	}
 });
 
@@ -302,7 +302,7 @@ $("body").on("click", ".editbtn", function (e) {
     $("#feed_id").val(document.getElementById("feedid" + f).innerHTML);
     $("#feed_name").val(document.getElementById("feedname" + f).innerHTML);
     $("#feed_site").val(document.getElementById("feedsite" + f).innerHTML);
-    if (document.getElementById("include_feed" + f).checked === true) {
+    if ($("#include_feed" + f).hasClass("includeck includedyes") === true) {
         $("#feed_include").prop("checked", true);
     } else {
         $("#feed_include").prop("checked", false);
